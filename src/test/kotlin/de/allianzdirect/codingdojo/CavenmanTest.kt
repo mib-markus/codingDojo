@@ -5,43 +5,37 @@ import org.junit.jupiter.api.Test
 
 class CavemanTest {
 
-    private fun getSharpness(actions: List<Action>): Int {
-        var sharpness = 0
-        for (i in 0 until actions.size - 1) {
-            val action = actions[i]
-            if (action == Action.SHARPEN) {
-                sharpness++
-            } else if (action == Action.POKE && sharpness > 0) {
-                sharpness--
-            }
-        }
-        println(actions + " " + sharpness)
-        return sharpness
-    }
+    private var countWinsPlayerOne = 0
+    private var countWinsPlayerTwo = 0
+
+    private val namePlayerOne = "Azubi"
+    private val namePlayerTwo = "Niko"
 
     @Test
-    fun main() {
-        //TODO implement TestCases or opponents method
-        test("SSPSSP")
+    fun begin() {
+        (0..99).forEach { _ ->
+            gameSetup()
+        }
     }
 
-    private fun test(opponent: String) {
+    private fun gameSetup() {
         var myActions = ""
         var opponentsActions = ""
 
-        for (c in opponent.toCharArray()) {
-            val input = if (myActions.isEmpty()) null else "$myActions,$opponentsActions"
+        (0..99).forEach { _ ->
+            val myInput = if (myActions.isEmpty()) null else "$myActions,$opponentsActions"
+            val opponentsInput = if (opponentsActions.isEmpty()) null else "$opponentsActions,$myActions"
 
-            myActions += call(input)
-            opponentsActions += c
+            myActions += playerOneActions(myInput)
+            opponentsActions += playerTwoActions(opponentsInput)
 
-            val result = battle(
-                    Action.parse(myActions),
-                    Action.parse(opponentsActions)
-            )
+            val result = battle(Action.parse(myActions), Action.parse(opponentsActions))
             if (result != null) {
                 print("$myActions,$opponentsActions")
                 println(" - $result")
+                println("$namePlayerOne, $countWinsPlayerOne")
+                println("$namePlayerTwo, $countWinsPlayerTwo")
+                println()
                 return
             }
         }
@@ -50,8 +44,12 @@ class CavemanTest {
         println(" - Stalemate")
     }
 
-    private fun call(input: String?): String {
-        return Caveman().run(input)
+    private fun playerTwoActions(opponentsInput: String?): String {
+        return CavemanSecondPlayer().run(opponentsInput)
+    }
+
+    private fun playerOneActions(myInput: String?): String {
+        return Caveman().run(myInput)
     }
 
     private fun battle(actions1: List<Action>, actions2: List<Action>): String? {
@@ -62,39 +60,59 @@ class CavemanTest {
 
         if (current1 == Action.POKE && current2 == Action.POKE) {
             return if (sharpness1 == 0 && sharpness2 > 0) {
-                "Opponent wins"
+                countWinsPlayerTwo++
+                "$namePlayerTwo wins"
             } else if (sharpness2 == 0 && sharpness1 > 0) {
-                "Player wins"
+                countWinsPlayerOne++
+                "$namePlayerOne wins"
             } else {
                 null
             }
         } else if (current1 == Action.POKE && current2 == Action.SHARPEN) {
             return if (sharpness1 > 0) {
-                "Player wins"
+                countWinsPlayerOne++
+                "$namePlayerOne wins"
             } else {
                 null
             }
         } else if (current2 == Action.POKE && current1 == Action.SHARPEN) {
             return if (sharpness2 > 0) {
-                "Opponent wins"
+                countWinsPlayerTwo++
+                "$namePlayerTwo wins"
             } else {
                 null
             }
         } else if (current1 == Action.POKE && current2 == Action.BLOCK) {
             return if (sharpness1 >= 5) {
-                "Player wins"
+                countWinsPlayerOne++
+                "$namePlayerOne wins"
             } else {
                 null
             }
         } else if (current2 == Action.POKE && current1 == Action.BLOCK) {
             return if (sharpness2 >= 5) {
-                "Opponent wins"
+                countWinsPlayerTwo++
+                "$namePlayerTwo wins"
             } else {
                 null
             }
         }
 
         return null
+    }
+
+    private fun getSharpness(actions: List<Action>): Int {
+        var sharpness = 0
+        (0 until actions.size - 1).forEach { i ->
+            val action = actions[i]
+            if (action == Action.SHARPEN) {
+                sharpness++
+            } else if (action == Action.POKE && sharpness > 0) {
+                sharpness--
+            }
+        }
+//        println(actions + " " + sharpness)
+        return sharpness
     }
 
 }
