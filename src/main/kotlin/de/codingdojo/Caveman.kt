@@ -1,6 +1,6 @@
-package de.allianzdirect.codingdojo
+package de.codingdojo
 
-import de.allianzdirect.codingdojo.utils.Action
+import de.codingdojo.utils.Action
 
 class Caveman {
 
@@ -36,8 +36,8 @@ class Caveman {
             return Action.POKE
         }
         if (opponentsActions[opponentsActions.size - 1] == Action.POKE && opponentsActions[opponentsActions.size - 2] == Action.SHARPEN && getSharpness(
-                        myActions
-                ) > 0
+                myActions
+            ) > 0
         ) {
             return Action.POKE
         }
@@ -52,17 +52,20 @@ class Caveman {
         } else Action.BLOCK
     }
 
-
     private fun getSharpness(actions: List<Action>): Int = getSharpnessRecursive(actions, 0)
 
     fun getSharpnessRecursive(actions: List<Action>, originalSharpness: Int): Int =
-            when {
-                actions.isEmpty() -> originalSharpness
-                actions.last() == Action.SHARPEN -> getSharpnessRecursive(actions.subList(0, actions.size - 1),
-                        originalSharpness + 1)
-                actions.last() == Action.POKE && originalSharpness > 0 -> getSharpnessRecursive(actions
-                        .subList(0, actions.size - 1), originalSharpness - 1)
-                else -> getSharpnessRecursive(actions.subList(0, actions.size - 1), originalSharpness)
-            }
-
+        when {
+            actions.isEmpty() -> originalSharpness
+            actions.last() == Action.SHARPEN -> getSharpnessRecursive(
+                actions.subList(0, actions.size - 1),
+                originalSharpness + 1
+            )
+            actions.last() == Action.POKE && originalSharpness > 0 -> getSharpnessRecursive(
+                actions
+                    .subList(0, actions.size - 1),
+                originalSharpness - 1
+            )
+            else -> getSharpnessRecursive(actions.subList(0, actions.size - 1), originalSharpness)
+        }
 }

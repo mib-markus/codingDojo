@@ -1,6 +1,6 @@
-package de.allianzdirect.codingdojo
+package de.codingdojo
 
-import de.allianzdirect.codingdojo.utils.Action
+import de.codingdojo.utils.Action
 import org.junit.jupiter.api.Test
 
 class CavemanTest {
@@ -8,8 +8,8 @@ class CavemanTest {
     private var countWinsPlayerOne = 0
     private var countWinsPlayerTwo = 0
 
-    private val namePlayerOne = "Azubi"
-    private val namePlayerTwo = "Niko"
+    private val namePlayerOne = "Test"
+    private val namePlayerTwo = "Markus"
 
     @Test
     fun begin() {
@@ -114,5 +114,4 @@ class CavemanTest {
 //        println(actions + " " + sharpness)
         return sharpness
     }
-
 }

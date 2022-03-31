@@ -15,7 +15,7 @@
     <description>Project for CodingDojo</description>
     <properties>
         <java.version>11</java.version>
-        <kotlin.version>1.4.32</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
     </properties>
     <dependencies>
         <dependency>
